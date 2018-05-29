@@ -6,9 +6,9 @@ This repository contains
 
 likelihood_list = [HetGaussian(), Bernoulli(), Categorical(K=3)]
 
-![gap](tmp/gap.png =100x20)
+![gap](tmp/gap.png)
 
-![london](tmp/london.png =100x20)
+![london](tmp/london.png)
 
 ## Contributors
 
