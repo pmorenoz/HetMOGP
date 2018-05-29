@@ -15,11 +15,14 @@ Please, if you use this code, cite the following paper:
 ## Usage
 
 * Output and input Data (X,Y):
+
 > Y = [Y_hg, Y_ber, Y_cat]
+
 > X = [X_hg, X_ber, X_cat]
 
 * Heterogeneous Likelihood definition:
-  likelihood_list = [HetGaussian(), Bernoulli(), Categorical(K=3)]
+
+likelihood_list = [HetGaussian(), Bernoulli(), Categorical(K=3)]
 
 ![gap](tmp/gap.png)
 
