@@ -5,7 +5,7 @@ This repository contains the implementation of our Heterogeneous Multi-output Ga
 - **hetmogp**: This module contains all model definitions, inference, and important utilities.
 - **likelihoods**: General library of probability distributions for the heterogeneous model.
 
-If you want to include a new likelihood function, please add your new script here. We provide further details about usage below.
+Our model is a novel extension of multi-output Gaussian processes for handling heterogeneous outputs (different statistical data-types). The following distributions are already available to be used: [Gaussian, Bernoulli, Heteroscedastic Gaussian, Categorical, Exponential, Gamma, Beta]. We expect to upload Student-t, Poisson, Ordinal and Dirichlet distributions code as soon as possible. If you want to contribute and include a new likelihood function, please follow the instructions given below add your new script to the *likelihoods* module.
 
 Please, if you use this code, cite the following paper:
 ```
@@ -18,6 +18,8 @@ Please, if you use this code, cite the following paper:
 ```
 
 ## Usage
+
+Our Python implementation follows a straightforward sintaxis where you only have to define a list of input and output values, build the heterogeneous likelihood with the desired distributions that you need and call directly to the model class. That is
 
 * Output and input data definition:
 ```
@@ -43,7 +45,7 @@ In notebooks>demo
 
 ## Contributors
 
-[Pablo Moreno-Muñoz!](http://www.tsc.uc3m.es/~pmoreno/), [Antonio Artés-Rodríguez!](http://www.tsc.uc3m.es/~antonio/) and [Mauricio A. Álvarez!](https://sites.google.com/site/maalvarezl/)
+[Pablo Moreno-Muñoz](http://www.tsc.uc3m.es/~pmoreno/), [Antonio Artés-Rodríguez](http://www.tsc.uc3m.es/~antonio/) and [Mauricio A. Álvarez](https://sites.google.com/site/maalvarezl/)
 
 For further information or contact:
 ```
