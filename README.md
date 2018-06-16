@@ -1,11 +1,11 @@
 # Heterogeneous Multi-output Gaussian Processes
 
-This repository contains the implementation of our Heterogeneous Multi-output Gaussian Process model (HetMOGP). The entire code is written in Python and connected with the GPy package, specially useful for Gaussian Process models. Our code consists of two main blocks:
+This repository contains the implementation of our Heterogeneous Multi-output Gaussian Process (HetMOGP) model. The entire code is written in Python and connected with the GPy package, specially useful for Gaussian processes. Our code consists of two main blocks:
 
-- **hetmogp**: This module contains all model definitions, inference, and important utilities.
-- **likelihoods**: General library of probability distributions for the heterogeneous model.
+- **hetmogp**: This block contains all model definitions, inference, and important utilities.
+- **likelihoods**: General library of probability distributions for the heterogeneous likelihood construction.
 
-Our tool is a novel extension of multi-output Gaussian processes for handling heterogeneous outputs (from different statistical data-types). The following distributions are already available to be used: [**Gaussian**, **Bernoulli**, **Heteroscedastic Gaussian**, **Categorical**, **Exponential**, **Gamma**, **Beta**]. We expect to upload **Student**, **Poisson**, **Ordinal** and **Dirichlet** distributions code as soon as possible. If you want to contribute and include a new likelihood function, please follow the instructions given below add your new script to the *likelihoods* module.
+Our tool is a novel extension of multi-output Gaussian processes for handling heterogeneous outputs (from different statistical data-types). The following distributions are already available to be used: [**Gaussian**, **Bernoulli**, **Heteroscedastic Gaussian**, **Categorical**, **Exponential**, **Gamma**, **Beta**]. We expect to upload **Student**, **Poisson**, **Ordinal** and **Dirichlet** distributions code as soon as possible. If you want to contribute and include a new likelihood function, please follow the instructions given below to add your new script to the *likelihoods* module.
 
 Please, if you use this code, cite the following paper:
 ```
@@ -39,14 +39,16 @@ A complete example of our model usage can be found in this repository at **noteb
 
 ## New Likelihoods
 
-The **heterogeneous likehood** structure (based on [GPstuff](https://github.com/gpstuff-dev/gpstuff) and [Eero Siivola](https://users.aalto.fi/~siivole1/)'s GPy release) permits to handle mixed likelihood distributions with different statistical data types in a very natural way. The idea behind this structure is that any user can add his own distributions easily by following a series of recommendations:
+The **heterogeneous likehood** structure (based on [Eero Siivola](https://users.aalto.fi/~siivole1/)'s GPy release and [GPstuff](https://github.com/gpstuff-dev/gpstuff)) permits to handle mixed likelihoods with different statistical data types in a very natural way. The idea behind this structure is that any user can add his own distributions easily by following a series of recommendations:
 
 1. Place your **new_distribution.py** under the likelihood directory.
-2.
+2. Define the **logpdf**, first order **dlogp_df** and second order derivatives **d2logp_df2** of your log-likelihood function.
+3. Use **var_exp** and **var_exp_derivatives** for approximating integrals with Gauss-Hermite quadratures.
+4. Code your **predictive** and **get_metadata** methods to have all available utilities.
 
 ## Examples
 * **Missing Gap Prediction:** Predicting in classification problems with information obtained
-in parallel regression tasks.
+from parallel regression tasks.
 ![gap](tmp/gap.png)
 
 * **London House Prices:** Spatial modeling with heterogeneous samples. This is a
