@@ -39,6 +39,11 @@ A complete example of our model usage can be found in this repository at **noteb
 
 ## New Likelihoods
 
+The **heterogeneous likehood** structure (based on [GPstuff](https://github.com/gpstuff-dev/gpstuff) and [Eero Siivola](https://users.aalto.fi/~siivole1/)'s GPy release) permits to handle mixed likelihood distributions with different statistical data types in a very natural way. The idea behind this structure is that any user can add his own distributions easily by following a series of recommendations:
+
+1. Place your **new_distribution.py** under the likelihood directory.
+2.
+
 ## Examples
 * **Missing Gap Prediction:** Predicting in classification problems with information obtained
 in parallel regression tasks.
