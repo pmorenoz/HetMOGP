@@ -5,7 +5,7 @@ This repository contains the implementation of our Heterogeneous Multi-output Ga
 - **hetmogp**: This module contains all model definitions, inference, and important utilities.
 - **likelihoods**: General library of probability distributions for the heterogeneous model.
 
-Our model is a novel extension of multi-output Gaussian processes for handling heterogeneous outputs (different statistical data-types). The following distributions are already available to be used: [**Gaussian**, **Bernoulli**, **Heteroscedastic Gaussian**, **Categorical**, **Exponential**, **Gamma**, **Beta**]. We expect to upload **Student**, **Poisson**, **Ordinal** and **Dirichlet** distributions code as soon as possible. If you want to contribute and include a new likelihood function, please follow the instructions given below add your new script to the *likelihoods* module.
+Our tool is a novel extension of multi-output Gaussian processes for handling heterogeneous outputs (from different statistical data-types). The following distributions are already available to be used: [**Gaussian**, **Bernoulli**, **Heteroscedastic Gaussian**, **Categorical**, **Exponential**, **Gamma**, **Beta**]. We expect to upload **Student**, **Poisson**, **Ordinal** and **Dirichlet** distributions code as soon as possible. If you want to contribute and include a new likelihood function, please follow the instructions given below add your new script to the *likelihoods* module.
 
 Please, if you use this code, cite the following paper:
 ```
@@ -35,12 +35,18 @@ likelihood_list = [HetGaussian(), Bernoulli(), Categorical(K=3)]
 model = SVMOGP(X=X, Y=Y, Z=Z, kern_list=kern_list, likelihood=likelihood, Y_metadata=Y_metadata)
 ```
 
-A complete example of our model usage can be found in this repository at notebooks>demo
+A complete example of our model usage can be found in this repository at **notebooks > demo**
 
-* Missing Gap Prediction
+## New Likelihoods
+
+## Examples
+* **Missing Gap Prediction:** Predicting in classification problems with information obtained
+in parallel regression tasks.
 ![gap](tmp/gap.png)
 
-* London House Prices
+* **London House Prices:** Spatial modeling with heterogeneous observations. This is a
+demographic example where we mix discrete data (type of house) with real observations
+(log-price of house sale contracts).
 ![london](tmp/london.png)
 
 ## Contributors
