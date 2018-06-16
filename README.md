@@ -2,8 +2,8 @@
 
 This repository contains the implementation of our Heterogeneous Multi-output Gaussian Process model (HetMOGP). The entire code is written in Python and connected with the GPy package, specially useful for Gaussian Process models. Our code consists of two main blocks:
 
-- **hetmogp** module contains model definition, inference, and utilities.
-2. **likelihoods** module is the general library for probability distributions.
+- **hetmogp**: This module contains all model definitions, inference, and important utilities.
+- **likelihoods**: General library of probability distributions for the heterogeneous model.
 
 If you want to include a new likelihood function, please add your new script here. We provide further details about usage below.
 
@@ -43,7 +43,7 @@ In notebooks>demo
 
 ## Contributors
 
-Pablo Moreno-Muñoz, Antonio Artés-Rodríguez and Mauricio A. Álvarez
+[Pablo Moreno-Muñoz!](http://www.tsc.uc3m.es/~pmoreno/), [Antonio Artés-Rodríguez!](http://www.tsc.uc3m.es/~antonio/) and [Mauricio A. Álvarez!](https://sites.google.com/site/maalvarezl/)
 
 For further information or contact:
 ```
