@@ -44,7 +44,7 @@ A complete example of our model usage can be found in this repository at **noteb
 in parallel regression tasks.
 ![gap](tmp/gap.png)
 
-* **London House Prices:** Spatial modeling with heterogeneous observations. This is a
+* **London House Prices:** Spatial modeling with heterogeneous samples. This is a
 demographic example where we mix discrete data (type of house) with real observations
 (log-price of house sale contracts).
 ![london](tmp/london.png)
