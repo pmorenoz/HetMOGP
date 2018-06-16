@@ -5,7 +5,7 @@ This repository contains the implementation of our Heterogeneous Multi-output Ga
 - **hetmogp**: This module contains all model definitions, inference, and important utilities.
 - **likelihoods**: General library of probability distributions for the heterogeneous model.
 
-Our model is a novel extension of multi-output Gaussian processes for handling heterogeneous outputs (different statistical data-types). The following distributions are already available to be used: [Gaussian, Bernoulli, Heteroscedastic Gaussian, Categorical, Exponential, Gamma, Beta]. We expect to upload Student-t, Poisson, Ordinal and Dirichlet distributions code as soon as possible. If you want to contribute and include a new likelihood function, please follow the instructions given below add your new script to the *likelihoods* module.
+Our model is a novel extension of multi-output Gaussian processes for handling heterogeneous outputs (different statistical data-types). The following distributions are already available to be used: [**Gaussian**, **Bernoulli**, **Heteroscedastic Gaussian**, **Categorical**, **Exponential**, **Gamma**, **Beta**]. We expect to upload **Student**, **Poisson**, **Ordinal** and **Dirichlet** distributions code as soon as possible. If you want to contribute and include a new likelihood function, please follow the instructions given below add your new script to the *likelihoods* module.
 
 Please, if you use this code, cite the following paper:
 ```
@@ -35,7 +35,7 @@ likelihood_list = [HetGaussian(), Bernoulli(), Categorical(K=3)]
 model = SVMOGP(X=X, Y=Y, Z=Z, kern_list=kern_list, likelihood=likelihood, Y_metadata=Y_metadata)
 ```
 
-In notebooks>demo
+A complete example of our model usage can be found in this repository at notebooks>demo
 
 * Missing Gap Prediction
 ![gap](tmp/gap.png)
