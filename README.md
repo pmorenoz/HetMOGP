@@ -7,7 +7,7 @@ This repository contains the implementation of our Heterogeneous Multi-output Ga
 
 Our tool is a novel extension of multi-output Gaussian processes for handling heterogeneous outputs (from different statistical data-types). The following distributions are already available to be used: [**Gaussian**, **Bernoulli**, **Heteroscedastic Gaussian**, **Categorical**, **Exponential**, **Gamma**, **Beta**]. We expect to upload **Student**, **Poisson**, **Ordinal** and **Dirichlet** distributions code as soon as possible. If you want to contribute and include a new likelihood function, please follow the instructions given below to add your new script to the *likelihoods* module.
 
-Please, if you use this code, cite the following paper:
+Please, if you use this code, cite the following [paper](https://arxiv.org/abs/1805.07633):
 ```
 @article{MorenoArtesAlvarez18,
   title={Heterogeneous Multi-output {G}aussian Process Prediction},
