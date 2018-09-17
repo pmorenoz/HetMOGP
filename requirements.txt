@@ -1,0 +1,6 @@
+hetmogp
+scipy==1.1.0
+numpy==1.14.3
+matplotlib==2.2.2
+GPy==1.9.5
+climin==0.1a1
