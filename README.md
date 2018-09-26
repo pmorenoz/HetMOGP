@@ -5,7 +5,7 @@ This repository contains the implementation of our Heterogeneous Multi-output Ga
 - **hetmogp**: This block contains all model definitions, inference, and important utilities.
 - **likelihoods**: General library of probability distributions for the heterogeneous likelihood construction.
 
-Our tool is a novel extension of multi-output Gaussian processes for handling heterogeneous outputs (from different statistical data-types). The following distributions are already available to be used: [**Gaussian**, **Bernoulli**, **Heteroscedastic Gaussian**, **Categorical**, **Exponential**, **Gamma**, **Beta**]. We expect to upload **Student**, **Poisson**, **Ordinal** and **Dirichlet** distributions code as soon as possible. If you want to contribute and include a new likelihood function, please follow the instructions given below to add your new script to the *likelihoods* module.
+Our tool is a novel extension of multi-output Gaussian processes for handling heterogeneous outputs (from different statistical data-types). The following distributions are already available to be used: [**Gaussian**, **Bernoulli**, **Heteroscedastic Gaussian**, **Categorical**, **Exponential**, **Gamma**, **Beta**, **Poisson**]. We expect to release code for **Student**, **Ordinal**, **Geometric**, **Binomial**, **Multinomial**, **Truncated Gaussian**, **Wishart** and **Dirichlet** likelihood distributions as soon as possible. If you want to contribute or include a new likelihood function, please follow the instructions given below to add your new script to the *likelihoods* module.
 
 Please, if you use this code, cite the following [paper](https://arxiv.org/abs/1805.07633):
 ```
@@ -19,12 +19,12 @@ Please, if you use this code, cite the following [paper](https://arxiv.org/abs/1
 
 ## Usage
 
-Our Python implementation follows a straightforward sintaxis where you only have to define a list of input and output values, build the heterogeneous likelihood with the desired distributions that you need and call directly to the model class. That is
+Our Python implementation follows a straightforward sintaxis where you only have to define a list of input and output values, build the heterogeneous likelihood with the desired distributions that you want to predict and call directly to the model class. That is
 
 * Output and input data definition:
 ```
-Y = [Y_hg, Y_ber, Y_cat]
-X = [X_hg, X_ber, X_cat]
+Y = [Y_real, Y_binary, Y_categorical]
+X = [X_real, X_binary, X_categorical]
 ```
 * Heterogeneous Likelihood definition:
 ```
@@ -55,6 +55,9 @@ from parallel regression tasks.
 demographic example where we mix discrete data (type of house) with real observations
 (log-price of house sale contracts).
 ![london](tmp/london.png)
+
+## Potential Applications
+We have collected many ideas about possible applications of our heterogeneous multi-output GP model. 
 
 ## Contributors
 
