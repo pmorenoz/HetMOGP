@@ -9,11 +9,11 @@ Our tool is a novel extension of multi-output Gaussian processes for handling he
 
 Please, if you use this code, cite the following [paper](https://arxiv.org/abs/1805.07633):
 ```
-@article{MorenoArtesAlvarez18,
-  title={Heterogeneous Multi-output {G}aussian Process Prediction},
-  author={Pablo Moreno-Mu\~noz, Antonio Art\'es-Rodríguez and Mauricio A. \'Alvarez},
-  journal={arXiv preprint arXiv:1805.07633},
-  year={2018}
+@inproceedings{MorenoArtesAlvarez18,
+  title =  {Heterogeneous Multi-output {G}aussian Process Prediction},
+  author =   {Moreno-Mu\~noz, Pablo and Art\'es-Rodr\'iguez, Antonio and \'Alvarez, Mauricio A},
+  booktitle = {Advances in Neural Information Processing Systems 31},
+  year =   {2018}
 }
 ```
 
