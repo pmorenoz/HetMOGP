@@ -137,7 +137,7 @@ def LCM(input_dim, output_dim, kernels_list, W_list, kappa_list, rank, name='B_q
     K, B = ICM(input_dim, output_dim, kernels_list[0], W=W_list[0], kappa=kappa_list[0], rank=rank, name='%s%s' %(name,0))
     B_q.append(B)
     for q, kernel in enumerate(kernels_list[1:]):
-        Kq, Bq = ICM(input_dim, output_dim, kernel, W=W_list[q], kappa=kappa_list[q], rank=rank, name='%s%s' %(name,q+1))
+        Kq, Bq = ICM(input_dim, output_dim, kernel, W=W_list[q+1], kappa=kappa_list[q+1], rank=rank, name='%s%s' %(name,q+1))
         B_q.append(Bq)
         K += Kq
     return K, B_q

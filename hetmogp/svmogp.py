@@ -274,6 +274,35 @@ class SVMOGP(GPy.core.SparseGP):
 
         return mu, np.abs(var) # corregir
 
+    def predictive_new(self, Xnew, output_function_ind=None, kern_list=None):
+        f_ind = self.Y_metadata['function_index'].flatten()
+        if output_function_ind is None:
+            output_function_ind = 0
+        d = output_function_ind
+        if kern_list is None:
+            kern_list = self.kern_list
+
+        Xmulti_all_new = self.Xmulti_all.copy()
+        Xmulti_all_new[f_ind[d]] = Xnew
+
+        posteriors_F = self.inference_method.inference(q_u_means=self.q_u_means,
+                                                       q_u_chols=self.q_u_chols, X=Xmulti_all_new, Y=self.Ymulti_all,
+                                                       Z=self.Z,
+                                                       kern_list=self.kern_list, likelihood=self.likelihood,
+                                                       B_list=self.B_list, Y_metadata=self.Y_metadata, predictive=True)
+        posterior = posteriors_F[output_function_ind]
+        Kx = np.zeros((Xmulti_all_new[f_ind[d]].shape[0], Xnew.shape[0]))
+        Kxx = np.zeros((Xnew.shape[0], Xnew.shape[0]))
+        for q, B_q in enumerate(self.B_list):
+            Kx += B_q.B[output_function_ind, output_function_ind] * kern_list[q].K(Xmulti_all_new[f_ind[d]], Xnew)
+            Kxx += B_q.B[output_function_ind, output_function_ind] * kern_list[q].K(Xnew, Xnew)
+
+        mu = np.dot(Kx.T, posterior.woodbury_vector)
+        Kxx = np.diag(Kxx)
+        var = (Kxx - np.sum(np.dot(np.atleast_3d(posterior.woodbury_inv).T, Kx) * Kx[None, :, :], 1)).T
+
+        return mu, np.abs(var)  # corregir
+
     def _raw_predict_stochastic(self, Xnew, output_function_ind=None, kern_list=None):
         f_ind = self.Y_metadata['function_index'].flatten()
         if output_function_ind is None:
