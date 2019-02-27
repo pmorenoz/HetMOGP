@@ -12,7 +12,7 @@ Please, if you use this code, cite the following [paper](https://arxiv.org/abs/1
 @inproceedings{MorenoArtesAlvarez18,
   title =  {Heterogeneous Multi-output {G}aussian Process Prediction},
   author =   {Moreno-Mu\~noz, Pablo and Art\'es-Rodr\'iguez, Antonio and \'Alvarez, Mauricio A},
-  booktitle = {Advances in Neural Information Processing Systems 31},
+  booktitle = {Advances in Neural Information Processing Systems (NeurIPS) 31},
   year =   {2018}
 }
 ```
