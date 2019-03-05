@@ -1,5 +1,5 @@
 from setuptools import setup
-
+# This is the setup thing (written by Wil)
 setup(
     name='HetMOGP',
     packages=['hetmogp'],
