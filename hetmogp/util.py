@@ -227,7 +227,7 @@ def _gradient_B(coreg, dL_dK, index, index2):
 
 def update_gradients_diag(coreg, dL_dKdiag):
     dL_dKdiag_small = np.array([dL_dKdiag_task.sum() for dL_dKdiag_task in dL_dKdiag])
-    coreg.W.gradient = coreg.W*dL_dKdiag_small[:, None] # should it be 2*..?
+    coreg.W.gradient = 2.*coreg.W*dL_dKdiag_small[:, None] # should it be 2*..? R/Yes Pablo, it should be :)
     coreg.kappa.gradient = dL_dKdiag_small
 
 def update_gradients_full(coreg, dL_dK, X, X2=None):
@@ -281,14 +281,16 @@ def gradients_coreg_diag(coreg, dL_dKdiag, kern_q, X, X2=None):
     dkappa = matrix_sum
     return dW, dkappa
 
-def vem_algorithm(model, stochastic=False, vem_iters=None, step_rate=None ,verbose=False, optZ=True, verbose_plot=False, non_chained=True):
+def vem_algorithm(model, vem_iters=None, maxIter_perVEM = None, step_rate=None ,verbose=False, optZ=True, verbose_plot=False, non_chained=True):
     if vem_iters is None:
         vem_iters = 5
+    if maxIter_perVEM is None:
+        maxIter_perVEM = 100
 
     model['.*.kappa'].fix() # must be always fixed
-    model.elbo = np.empty((vem_iters,1))
+    #model.elbo = np.empty((vem_iters,1))
 
-    if stochastic is False:
+    if model.batch_size is None:
 
         for i in range(vem_iters):
             # VARIATIONAL E-STEP
@@ -299,7 +301,7 @@ def vem_algorithm(model, stochastic=False, vem_iters=None, step_rate=None ,verbo
 
             model.q_u_means.unfix()
             model.q_u_chols.unfix()
-            model.optimize(messages=verbose, max_iters=100)
+            model.optimize(messages=verbose, max_iters=maxIter_perVEM)
             print('iteration ('+str(i+1)+') VE step, log_likelihood='+str(model.log_likelihood().flatten()))
 
             # VARIATIONAL M-STEP
@@ -312,17 +314,43 @@ def vem_algorithm(model, stochastic=False, vem_iters=None, step_rate=None ,verbo
 
             model.q_u_means.fix()
             model.q_u_chols.fix()
-            model.optimize(messages=verbose, max_iters=100)
+            model.optimize(messages=verbose, max_iters=maxIter_perVEM)
             print('iteration (' + str(i+1) + ') VM step, log_likelihood=' + str(model.log_likelihood().flatten()))
 
     else:
-            if step_rate is None:
-                step_rate = 0.01
 
-            sto_iters = vem_iters
-            model.elbo = np.empty((sto_iters+1,1))
-            optimizer = climin.Adadelta(model.optimizer_array, model.stochastic_grad, step_rate=step_rate, momentum=0.9)
-            c_full = partial(model.callback, max_iter=sto_iters, verbose=verbose, verbose_plot=verbose_plot)
+        if step_rate is None:
+            step_rate = 0.01
+
+        model.elbo = np.empty((maxIter_perVEM*vem_iters+2, 1))
+        model.elbo[0,0]=model.log_likelihood()
+        c_full = partial(model.callback, max_iter=maxIter_perVEM, verbose=verbose, verbose_plot=verbose_plot)
+
+        for i in range(vem_iters):
+            # VARIATIONAL E-STEP
+            model['.*.lengthscale'].fix()
+            model['.*.variance'].fix()
+            model.Z.fix()
+            model['.*.W'].fix()
+
+            model.q_u_means.unfix()
+            model.q_u_chols.unfix()
+            optimizer = climin.Adam(model.optimizer_array, model.stochastic_grad, step_rate=step_rate,decay_mom1=1 - 0.9, decay_mom2=1 - 0.999)
             optimizer.minimize_until(c_full)
+            print('iteration (' + str(i + 1) + ') VE step, mini-batch log_likelihood=' + str(model.log_likelihood().flatten()))
+            #
+            # # VARIATIONAL M-STEP
+            model['.*.lengthscale'].unfix()
+            model['.*.variance'].unfix()
+            if optZ:
+                model.Z.unfix()
+            if non_chained:
+                model['.*.W'].unfix()
+
+            model.q_u_means.fix()
+            model.q_u_chols.fix()
+            optimizer = climin.Adam(model.optimizer_array, model.stochastic_grad, step_rate=step_rate,decay_mom1=1 - 0.9, decay_mom2=1 - 0.999)
+            optimizer.minimize_until(c_full)
+            print('iteration (' + str(i + 1) + ') VM step, mini-batch log_likelihood=' + str(model.log_likelihood().flatten()))
 
     return model
