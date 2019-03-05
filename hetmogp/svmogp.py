@@ -103,6 +103,7 @@ class SVMOGP(GPy.core.SparseGP):
             Kffdiag = []
             KuqF = []
             for d in range(D):
+                #main correction consisted of building Kffdiag by multiplying also kern_q.Kdiag
                 Kffdiag.append(kern_q.Kdiag(self.Xmulti[f_index[d]]) * self.gradients['dL_dKdiag'][q][d])
                 KuqF.append(kern_q.K(self.Z[:,q*self.Xdim:q*self.Xdim+self.Xdim], self.Xmulti[f_index[d]]) * self.gradients['dL_dKmn'][q][d])
 
