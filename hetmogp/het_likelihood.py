@@ -9,9 +9,32 @@ from itertools import compress
 
 class HetLikelihood(Likelihood):
     """
-    Heterogeneous Likelihood where
+    Description:    Heterogeneous Likelihood class for arbitrary combination of marginal likelihoods.
+    Distributions:  See the ones available at /likelihoods/ folder.
+    Methods:        * --- initialization --- *
+                    1. __init__
+                    2. generate_metadata
+
+                    * --- distributions --- *
+                    3. pdf
+                    4. logpdf
+                    5. predictive
+                    6. negative_log_predictive
+
+                    * --- sampling --- *
+                    7. samples
+
+                    * --- integrals and gradients --- *
+                    8. var_exp
+                    9. var_exp_derivatives
+
+                    * --- dimensions --- *
+                    10. num_output_functions
+                    11. ismulti
 
     """
+
+##   1.   ##############################################################################################################
 
     def __init__(self, likelihoods_list, gp_link=None ,name='heterogeneous_likelihood'):
         if gp_link is None:
@@ -21,9 +44,11 @@ class HetLikelihood(Likelihood):
 
         self.likelihoods_list = likelihoods_list
 
+##   2.   ##############################################################################################################
+
     def generate_metadata(self):
         """
-        Generates Metadata: Given an Heterogeneous likelihood, it calculates the number functions f required in the
+        Description: Given an Heterogeneous likelihood, it calculates the number functions f required in the
         model, the assignments of each f to its likelihood function, dimensionality of y_d and functions needed for
         predictions.
         """
@@ -43,9 +68,11 @@ class HetLikelihood(Likelihood):
                     'd_index': np.int_(d_index[0,1:]),'pred_index': np.int_(p_index[0,1:])}
         return metadata
 
+##   3.   ##############################################################################################################
+
     def pdf(self, f, Y, Y_metadata):
         """
-        Returns a list of PDFs from all likelihoods.
+        Description: Returns a list of PDFs from all likelihoods.
         """
         t_ind = Y_metadata['task_index'].flatten()
         y_ind = Y_metadata['y_index'].flatten()
@@ -56,9 +83,11 @@ class HetLikelihood(Likelihood):
             pdf[:, t_ind == t] = self.likelihoods_list[t].pdf(f[:, f_ind == t], Y[:, y_ind == t], Y_metadata=None)
         return pdf
 
+##   4.   ##############################################################################################################
+
     def logpdf(self, f, Y, Y_metadata):
         """
-        Returns a list of log-PDFs from all likelihoods.
+        Description: Returns a list of log-PDFs from all likelihoods.
         """
         t_ind = Y_metadata['task_index'].flatten()
         y_ind = Y_metadata['y_index'].flatten()
@@ -69,70 +98,11 @@ class HetLikelihood(Likelihood):
             logpdf[:, t_ind == t] = self.likelihoods_list[t].logpdf(f[:, f_ind == t], Y[:, y_ind == t], Y_metadata=None)
         return logpdf
 
-    def samples(self, F, Y_metadata):
-        """
-        Returns a list of samples from all likelihoods.
-        """
-        t_ind = Y_metadata['task_index'].flatten()
-        y_ind = Y_metadata['y_index'].flatten()
-        f_ind = Y_metadata['function_index'].flatten()
-        tasks = np.unique(t_ind)
-        samples = []
-        for t in tasks:
-            samples.append(self.likelihoods_list[t].samples(F[t], num_samples=1, Y_metadata=None))
-        return samples
-
-    def num_output_functions(self, Y_metadata):
-        """
-        Returns the number of functions f that are required in the model for a given heterogeneous likelihood.
-        """
-        f_ind = Y_metadata['function_index'].flatten()
-        return f_ind.shape[0]
-
-    def num_latent_functions(self):
-        pass
-
-    def ismulti(self, task):
-        """
-        For a given task d (heterogeneous output) returns if y_d is or is not multivariate.
-        """
-        return self.likelihoods_list[task].ismulti()
-
-    def var_exp(self, Y, mu_F, v_F, Y_metadata):
-        """
-        Returns a list of variational expectations from all likelihoods wrt to parameter functions (PFs) f.
-        """
-        t_ind = Y_metadata['task_index'].flatten()
-        y_ind = Y_metadata['y_index'].flatten()
-        f_ind = Y_metadata['function_index'].flatten()
-        d_ind = Y_metadata['d_index'].flatten()
-        tasks = np.unique(t_ind)
-        var_exp = []
-        for t in tasks:
-
-            ve_task = self.likelihoods_list[t].var_exp(Y[t], mu_F[t], v_F[t], Y_metadata=None)
-            var_exp.append(ve_task)
-        return var_exp
-
-    def var_exp_derivatives(self, Y, mu_F, v_F, Y_metadata):
-        """
-        Returns a list of variational expectations from all likelihood derivatives wrt to parameter functions (PFs) f.
-        """
-        t_ind = Y_metadata['task_index'].flatten()
-        y_ind = Y_metadata['y_index'].flatten()
-        f_ind = Y_metadata['function_index'].flatten()
-        tasks = np.unique(t_ind)
-        var_exp_dm = []
-        var_exp_dv = []
-        for t in tasks:
-            ve_task_dm, ve_task_dv = self.likelihoods_list[t].var_exp_derivatives(Y[t], mu_F[t], v_F[t], Y_metadata=None)
-            var_exp_dm.append(ve_task_dm)
-            var_exp_dv.append(ve_task_dv)
-        return var_exp_dm, var_exp_dv
+##   5.   ##############################################################################################################
 
     def predictive(self, mu_F_pred, v_F_pred, Y_metadata):
         """
-        Returns a list of predictive mean and variance from all likelihoods.
+        Description: Returns a list of predictive mean and variance from all likelihoods.
         """
         t_ind = Y_metadata['task_index'].flatten()
         y_ind = Y_metadata['y_index'].flatten()
@@ -147,9 +117,11 @@ class HetLikelihood(Likelihood):
             v_pred.append(v_pred_task)
         return m_pred, v_pred
 
+##   6.   ##############################################################################################################
+
     def negative_log_predictive(self, Ytest, mu_F_star, v_F_star, Y_metadata, num_samples):
         """
-        Returns the negative log-predictive density (NLPD) of the model over test data Ytest.
+        Description: Returns the negative log-predictive density (NLPD) of the model over test data Ytest.
         """
         t_ind = Y_metadata['task_index'].flatten()
         y_ind = Y_metadata['y_index'].flatten()
@@ -162,3 +134,73 @@ class HetLikelihood(Likelihood):
 
         nlogpred = -logpred
         return nlogpred
+
+##   7.   ##############################################################################################################
+
+    def samples(self, F, Y_metadata):
+        """
+        Description: Returns a list of samples from all likelihoods.
+        """
+        t_ind = Y_metadata['task_index'].flatten()
+        y_ind = Y_metadata['y_index'].flatten()
+        f_ind = Y_metadata['function_index'].flatten()
+        tasks = np.unique(t_ind)
+        samples = []
+        for t in tasks:
+            samples.append(self.likelihoods_list[t].samples(F[t], num_samples=1, Y_metadata=None))
+        return samples
+
+##   8.   ##############################################################################################################
+
+    def var_exp(self, Y, mu_F, v_F, Y_metadata):
+        """
+        Description: Returns a list of variational expectations from all likelihoods wrt to parameter functions (PFs) f.
+        """
+        t_ind = Y_metadata['task_index'].flatten()
+        y_ind = Y_metadata['y_index'].flatten()
+        f_ind = Y_metadata['function_index'].flatten()
+        d_ind = Y_metadata['d_index'].flatten()
+        tasks = np.unique(t_ind)
+        var_exp = []
+        for t in tasks:
+
+            ve_task = self.likelihoods_list[t].var_exp(Y[t], mu_F[t], v_F[t], Y_metadata=None)
+            var_exp.append(ve_task)
+        return var_exp
+
+##   9.   ##############################################################################################################
+
+    def var_exp_derivatives(self, Y, mu_F, v_F, Y_metadata):
+        """
+        Description: Returns a list of variational expectations from all likelihood derivatives wrt to parameter functions (PFs) f.
+        """
+        t_ind = Y_metadata['task_index'].flatten()
+        y_ind = Y_metadata['y_index'].flatten()
+        f_ind = Y_metadata['function_index'].flatten()
+        tasks = np.unique(t_ind)
+        var_exp_dm = []
+        var_exp_dv = []
+        for t in tasks:
+            ve_task_dm, ve_task_dv = self.likelihoods_list[t].var_exp_derivatives(Y[t], mu_F[t], v_F[t], Y_metadata=None)
+            var_exp_dm.append(ve_task_dm)
+            var_exp_dv.append(ve_task_dv)
+        return var_exp_dm, var_exp_dv
+
+##   10.   ##############################################################################################################
+
+    def num_output_functions(self, Y_metadata):
+        """
+        Description: Returns the number of functions f that are required in the model for a given heterogeneous likelihood.
+        """
+        f_ind = Y_metadata['function_index'].flatten()
+        return f_ind.shape[0]
+
+##   11.   ##############################################################################################################
+
+    def ismulti(self, task):
+        """
+        Description: For a given task d (heterogeneous output) returns if y_d is or is not multivariate.
+        """
+        return self.likelihoods_list[task].ismulti()
+
+########################################################################################################################
