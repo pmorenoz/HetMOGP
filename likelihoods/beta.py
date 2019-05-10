@@ -107,7 +107,7 @@ class Beta(Likelihood):
         # Variational Expectation
         # gh: Gaussian-Hermite quadrature
         if gh_points is None:
-            gh_f, gh_w = self._gh_points(T=10)
+            gh_f, gh_w = self._gh_points(T=20)
         else:
             gh_f, gh_w = gh_points
         gh_w = gh_w / np.sqrt(np.pi)
@@ -139,9 +139,9 @@ class Beta(Likelihood):
         logp = logp.reshape(tuple(grid_tuple))
 
         # calculating quadrature
-        var_exp = logp.dot(gh_w) / np.sqrt(np.pi)
+        var_exp = logp.dot(gh_w)# / np.sqrt(np.pi)
         for d in range(D - 1):
-            var_exp = var_exp.dot(gh_w) / np.sqrt(np.pi)
+            var_exp = var_exp.dot(gh_w)# / np.sqrt(np.pi)
 
         return var_exp[:, None]
 
@@ -149,7 +149,7 @@ class Beta(Likelihood):
         # Variational Expectation
         # gh: Gaussian-Hermite quadrature
         if gh_points is None:
-            gh_f, gh_w = self._gh_points(T=10)
+            gh_f, gh_w = self._gh_points(T=20)
         else:
             gh_f, gh_w = gh_points
         gh_w = gh_w / np.sqrt(np.pi)
@@ -186,10 +186,10 @@ class Beta(Likelihood):
         d2logp_a = d2logp_a.reshape(tuple(grid_tuple))
         d2logp_b = d2logp_b.reshape(tuple(grid_tuple))
 
-        ve_dm_fa = dlogp_a.dot(gh_w).dot(gh_w) / np.square(np.sqrt(np.pi))
-        ve_dm_fb = dlogp_b.dot(gh_w).dot(gh_w) / np.square(np.sqrt(np.pi))
-        ve_dv_fa = d2logp_a.dot(gh_w).dot(gh_w) / np.square(np.sqrt(np.pi))
-        ve_dv_fb = d2logp_b.dot(gh_w).dot(gh_w) / np.square(np.sqrt(np.pi))
+        ve_dm_fa = dlogp_a.dot(gh_w).dot(gh_w)# / np.square(np.sqrt(np.pi))
+        ve_dm_fb = dlogp_b.dot(gh_w).dot(gh_w)# / np.square(np.sqrt(np.pi))
+        ve_dv_fa = d2logp_a.dot(gh_w).dot(gh_w)# / np.square(np.sqrt(np.pi))
+        ve_dv_fb = d2logp_b.dot(gh_w).dot(gh_w)# / np.square(np.sqrt(np.pi))
 
         var_exp_dm = np.hstack((ve_dm_fa[:,None], ve_dm_fb[:,None]))
         var_exp_dv = 0.5*np.hstack((ve_dv_fa[:,None], ve_dv_fb[:,None]))
@@ -200,7 +200,7 @@ class Beta(Likelihood):
         # Variational Expectation
         # gh: Gaussian-Hermite quadrature
         if gh_points is None:
-            gh_f, gh_w = self._gh_points()
+            gh_f, gh_w = self._gh_points(T=20)
         else:
             gh_f, gh_w = gh_points
         gh_w = gh_w / np.sqrt(np.pi)
@@ -228,14 +228,14 @@ class Beta(Likelihood):
 
         mean = self.mean(F)
         mean = mean.reshape(tuple(grid_tuple))
-        mean_pred = mean.dot(gh_w).dot(gh_w) / np.square(np.sqrt(np.pi))
+        mean_pred = mean.dot(gh_w).dot(gh_w)# / np.square(np.sqrt(np.pi))
 
         var = self.variance(F)
         var = var.reshape(tuple(grid_tuple))
-        var_int = var.dot(gh_w).dot(gh_w) / np.square(np.sqrt(np.pi))
+        var_int = var.dot(gh_w).dot(gh_w)# / np.square(np.sqrt(np.pi))
         mean_sq = self.mean_sq(F)
         mean_sq = mean_sq.reshape(tuple(grid_tuple))
-        mean_sq_int = mean_sq.dot(gh_w).dot(gh_w) / np.square(np.sqrt(np.pi))
+        mean_sq_int = mean_sq.dot(gh_w).dot(gh_w)# / np.square(np.sqrt(np.pi))
 
         var_pred = var_int + mean_sq_int - safe_square(mean_pred)
         return mean_pred[:,None] , var_pred[:,None]
