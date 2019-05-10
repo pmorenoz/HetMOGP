@@ -134,6 +134,8 @@ class Categorical(Likelihood):
             gh_f, gh_w = self._gh_points(T=10)
         else:
             gh_f, gh_w = gh_points
+
+        gh_w = gh_w / np.sqrt(np.pi)
         D = M.shape[1]
         # grid-size and fd tuples
         expanded_F_tuples = []
@@ -163,9 +165,9 @@ class Categorical(Likelihood):
         logp = logp.reshape(tuple(grid_tuple))
 
         # calculating quadrature
-        var_exp = logp.dot(gh_w) / np.sqrt(np.pi)
+        var_exp = logp.dot(gh_w)# / np.sqrt(np.pi)
         for d in range(D-1):
-            var_exp = var_exp.dot(gh_w) / np.sqrt(np.pi)
+            var_exp = var_exp.dot(gh_w)# / np.sqrt(np.pi)
 
         return var_exp[:,None]
 
@@ -176,6 +178,8 @@ class Categorical(Likelihood):
             gh_f, gh_w = self._gh_points(T=10)
         else:
             gh_f, gh_w = gh_points
+
+        gh_w = gh_w / np.sqrt(np.pi)
         N = M.shape[0]
         D = M.shape[1]
         # grid-size and fd tuples
@@ -208,14 +212,14 @@ class Categorical(Likelihood):
             # wrt to the mean
             dlogp = self.dlogp_df(d, F, Y_full)
             dlogp = dlogp.reshape(tuple(grid_tuple))
-            ve_dm = dlogp.dot(gh_w) / np.sqrt(np.pi)
+            ve_dm = dlogp.dot(gh_w)# / np.sqrt(np.pi)
             # wrt to the variance
             d2logp = self.d2logp_df2(d, F, Y_full)
             d2logp = d2logp.reshape(tuple(grid_tuple))
-            ve_dv = d2logp.dot(gh_w) / np.sqrt(np.pi)
+            ve_dv = d2logp.dot(gh_w)# / np.sqrt(np.pi)
             for fd in range(D - 1):
-                ve_dm = ve_dm.dot(gh_w) / np.sqrt(np.pi)
-                ve_dv = ve_dv.dot(gh_w) / np.sqrt(np.pi)
+                ve_dm = ve_dm.dot(gh_w)# / np.sqrt(np.pi)
+                ve_dv = ve_dv.dot(gh_w)# / np.sqrt(np.pi)
 
             var_exp_dm[:,d] = ve_dm
             var_exp_dv[:,d] = 0.5 * ve_dv
@@ -228,6 +232,8 @@ class Categorical(Likelihood):
             gh_f, gh_w = self._gh_points(T=10)
         else:
             gh_f, gh_w = gh_points
+
+        gh_w = gh_w / np.sqrt(np.pi)
         N = M.shape[0]
         D = M.shape[1]
         # grid-size and fd tuples
@@ -259,11 +265,11 @@ class Categorical(Likelihood):
             # wrt to the mean
             mean_k = self.rho_k(F, d)
             mean_k = mean_k.reshape(tuple(grid_tuple))
-            mean_pred_k = mean_k.dot(gh_w) / np.sqrt(np.pi)
+            mean_pred_k = mean_k.dot(gh_w)# / np.sqrt(np.pi)
             # wrt to the variance
             # NOT IMPLEMENTED
             for fd in range(D - 1):
-                mean_pred_k = mean_pred_k.dot(gh_w) / np.sqrt(np.pi)
+                mean_pred_k = mean_pred_k.dot(gh_w)# / np.sqrt(np.pi)
 
             mean_pred[:, d] = mean_pred_k
         return mean_pred, var_pred

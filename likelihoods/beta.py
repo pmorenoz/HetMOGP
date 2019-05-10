@@ -35,6 +35,9 @@ class Beta(Likelihood):
         logpdf = ((a - 1)*np.log(y)) + ((b - 1)*np.log(1-y)) - betaln(a, b)
         return logpdf
 
+    #def logpdf_sampling(self, F, y, Y_metadata=None): #TO BE IMPLEMENTED
+    #    return logpdf
+
     def samples(self, F ,num_samples, Y_metadata=None):
         eF = safe_exp(F)
         a = eF[:,0,None]
@@ -110,8 +113,10 @@ class Beta(Likelihood):
             gh_f, gh_w = self._gh_points(T=20)
         else:
             gh_f, gh_w = gh_points
+
         gh_w = gh_w / np.sqrt(np.pi)
         D = M.shape[1]
+        # grid-size and fd tuples
         expanded_F_tuples = []
         grid_tuple = [M.shape[0]]
         for d in range(D):
@@ -152,8 +157,10 @@ class Beta(Likelihood):
             gh_f, gh_w = self._gh_points(T=20)
         else:
             gh_f, gh_w = gh_points
+
         gh_w = gh_w / np.sqrt(np.pi)
         D = M.shape[1]
+        # grid-size and fd tuples
         expanded_F_tuples = []
         grid_tuple = [M.shape[0]]
         for d in range(D):
@@ -203,6 +210,7 @@ class Beta(Likelihood):
             gh_f, gh_w = self._gh_points(T=20)
         else:
             gh_f, gh_w = gh_points
+
         gh_w = gh_w / np.sqrt(np.pi)
         D = M.shape[1]
         expanded_F_tuples = []
@@ -240,6 +248,8 @@ class Beta(Likelihood):
         var_pred = var_int + mean_sq_int - safe_square(mean_pred)
         return mean_pred[:,None] , var_pred[:,None]
 
+    #    def log_predictive(self, Ytest, mu_F_star, v_F_star, num_samples): #TO BE IMPLEMENTED
+    #        return log_predictive
 
     def get_metadata(self):
         dim_y = 1
